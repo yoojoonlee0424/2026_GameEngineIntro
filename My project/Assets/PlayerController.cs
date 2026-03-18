@@ -5,20 +5,33 @@ public class move : MonoBehaviour
 {
     
     private Vector2 moveInput;
-    public float jumpForce = 5f;
-    public float moveSpeed = 5f;
+    public float jumpForce = 1f;
+    public float moveSpeed = 1f;
     private Rigidbody2D rb;
+    private Animator myAnimator;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
+        myAnimator.SetBool("move", false);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.name == "door")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
 
 
     public void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+       moveInput = value.Get<Vector2>();
     }
 
 
@@ -41,8 +54,18 @@ public class move : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-        transform.Translate(Vector3.right * moveSpeed * moveInput.x * Time.deltaTime);  
+        
 
 
+        if (moveInput.magnitude > 0)
+        {
+            myAnimator.SetBool("move", true);    
+        }
+        else
+        {
+            myAnimator.SetBool("move", false);
+        }
+
+        transform.Translate(Vector3.right * moveSpeed * moveInput.x * Time.deltaTime);
     }
 }
