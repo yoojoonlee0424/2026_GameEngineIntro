@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class move : MonoBehaviour
 {
@@ -19,13 +20,30 @@ public class move : MonoBehaviour
         myAnimator.SetBool("move", false);
     }
 
+    
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.name == "door")
+        if(collision.name == "pit")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            SceneManager.LoadScene("PlayScene_" + collision.name);
+        }
+        if (collision.name == "Boss")
         {
             Destroy(collision.gameObject);
         }
     }
+
+  
+
+
+
+ 
+
 
 
 
